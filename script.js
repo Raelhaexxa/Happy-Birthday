@@ -1,33 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- Live Age Counter ---
-    const birthDate = new Date('2006-08-14T00:00:00');
-    const countdownElement = document.getElementById('countdown');
+    const birthday = new Date(2026, 10, 19, 0, 0, 0);
 
-    function updateAge() {
-        const now = new Date();
+function updateCountdown() {
+    const now = new Date();
+    const difference = birthday - now;
 
-        let years = now.getFullYear() - birthDate.getFullYear();
-        let months = now.getMonth() - birthDate.getMonth();
-        let days = now.getDate() - birthDate.getDate();
-        let hours = now.getHours() - birthDate.getHours();
-        let minutes = now.getMinutes() - birthDate.getMinutes();
-        let seconds = now.getSeconds() - birthDate.getSeconds();
-
-        if (seconds < 0) { seconds += 60; minutes--; }
-        if (minutes < 0) { minutes += 60; hours--; }
-        if (hours < 0) { hours += 24; days--; }
-        if (days < 0) {
-            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-            days += prevMonth.getDate();
-            months--;
-        }
-        if (months < 0) { months += 12; years--; }
-
-        countdownElement.innerHTML = `${years}y ${months}m ${days}d <br> ${hours}h ${minutes}m ${seconds}s`;
+    if (difference <= 0) {
+        document.getElementById("countdown").innerHTML =
+            "Happy Birthday, Nice! ❤️";
+        return;
     }
-    setInterval(updateAge, 1000);
-    updateAge();
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((difference / (1000 * 60)) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    document.getElementById("countdown").innerHTML =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
 
     // --- Initialize AOS (Animate on Scroll) ---
     AOS.init({
